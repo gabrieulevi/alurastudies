@@ -1,9 +1,11 @@
-import mongoose, {mongo} from "mongoose"
+import mongoose, { mongo } from "mongoose";
+import "dotenv/config";
 
-async function dbConnection(){
-    mongoose.connect("mongodb+srv://admin:admin@cluster0.fy15gyy.mongodb.net/bookstore?retryWrites=true&w=majority")
+async function dbConnection() {
+    console.log(process.env.DB_CONNECTION_STRING)
+  mongoose.connect(process.env.DB_CONNECTION_STRING);
 
-    return mongoose.connection
-} 
+  return mongoose.connection;
+}
 
-export default dbConnection
+export default dbConnection;

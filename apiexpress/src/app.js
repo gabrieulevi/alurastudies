@@ -1,18 +1,21 @@
 import express from "express";
 import dbConnection from "./config/dbConnect.js";
+//import book from "./models/Book.js";
+import routes from "./routes/index.js";
 
 const con = await dbConnection();
 
 con.on("error", (error) => {
-  console.error(`Connection error: ${error}`)
-})
+  console.error(`Connection error: ${error}`);
+});
 
 con.once("open", () => {
-  console.log("Database connection successfully made")
-})
+  console.log("Database connection successfully made");
+});
 
 const app = express();
-app.use(express.json());
+routes(app)
+// app.use(express.json());
 const books = [
   {
     id: 1,
@@ -30,14 +33,15 @@ function getBook(id) {
   });
 }
 
-app.get("/", (req, res) => {
-  res.status(200).send("Hello world (home)");
-  console.log(req.url, res.status);
-});
+// app.get("/", (req, res) => {
+//   res.status(200).send("Hello world (home)");
+//   console.log(req.url, res.status);
+// });
 
-app.get("/books", (req, res) => {
-  res.status(200).json(books);
-});
+// app.get("/books", async (req, res) => {
+//   const bookList = await book.find({});
+//   res.status(200).json(bookList);
+// });
 
 app.post("/books", (req, res) => {
   books.push(req.body);
