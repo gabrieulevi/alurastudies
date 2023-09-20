@@ -1,6 +1,7 @@
 import express from 'express';
 import dbConnection from './config/dbConnect.js';
 import routes from './routes/index.js';
+import errorManipulator from './middlewares/errorManipulator.js';
 
 const con = await dbConnection();
 
@@ -14,5 +15,6 @@ con.once('open', () => {
 
 const app = express();
 routes(app);
+app.use(errorManipulator);
 
 export default app;

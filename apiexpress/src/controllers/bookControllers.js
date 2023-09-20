@@ -2,28 +2,24 @@ import { author } from '../models/Author.js';
 import book from '../models/Book.js';
 
 class BookController {
-	static async listBooks(req, res) {
+	static async listBooks(req, res, next) {
 		try {
 			const bookList = await book.find({});
 			res.status(200).json(bookList);
 		} catch (error) {
-			res.status(500).json({ message: `requisition failure: ${error}` });
+			next(error);
 		}
 	}
-	static async listBookById(req, res) {
+	static async listBookById(req, res, next) {
 		try {
 			const id = req.params.id;
 			const fetchedBook = await book.findById(id);
 			res.status(200).json(fetchedBook);
 		} catch (error) {
-			res
-				.status(500)
-				.json({
-					message: `requisition failure while trying to get book: ${error}`,
-				});
+			next(error);
 		}
 	}
-	static async bookPost(req, res) {
+	static async bookPost(req, res, next) {
 		const newBook = req.body;
 		try {
 			const foundAuthor = await author.findById(newBook.author);
@@ -31,23 +27,19 @@ class BookController {
 			const createdBook = await book.create(fullBook);
 			res.status(201).json({ message: 'successfully created', book: createdBook });
 		} catch (error) {
-			res.status(500).json({ message: `couldnt create book -> ${error}` });
+			next(error);
 		}
 	}
-	static async updateBookById(req, res) {
+	static async updateBookById(req, res, next) {
 		try {
 			const id = req.params.id;
 			await book.findByIdAndUpdate(id, req.body);
 			res.status(200).json({ message: `Book Updated: ${book.findById(id)}` });
 		} catch (error) {
-			res
-				.status(500)
-				.json({
-					message: `requisition failure while trying to get book: ${error}`,
-				});
+			next(error);
 		}
 	}
-	static async deleteBookById(req, res) {
+	static async deleteBookById(req, res, next) {
 		try {
 			const id = req.params.id;
 			await book.findByIdAndDelete(id);
@@ -55,12 +47,10 @@ class BookController {
 				.status(200)
 				.json({ message: `book successfully deleted: ${book.findById(id)}` });
 		} catch (error) {
-			res
-				.status(500)
-				.json({ message: `error while trying to delete book: ${error}` });
+			next(error);
 		}
 	}
-	static async getBookByPublishingCompany(req, res) {
+	static async getBookByPublishingCompany(req, res, next) {
 		const publishingCompany = req.query.publishingCompany;
 		try {
 			const bookByPublishingCompany = await book.find({
@@ -68,9 +58,7 @@ class BookController {
 			});
 			res.status(200).json({ book: bookByPublishingCompany });
 		} catch (error) {
-			res
-				.status(404)
-				.json({ message: `error while trying to find book: ${error}` });
+			next(error);
 		}
 	}
 }
