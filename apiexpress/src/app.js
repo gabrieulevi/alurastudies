@@ -6,11 +6,11 @@ import errorManipulator from './middlewares/errorManipulator.js';
 const con = await dbConnection();
 
 con.on('error', (error) => {
-	console.error(`Connection error: ${error}`);
+    console.error(`Connection error: ${error}`);
 });
 
 con.once('open', () => {
-	console.log('Database connection successfully made');
+    console.log('Database connection successfully made');
 });
 
 const app = express();

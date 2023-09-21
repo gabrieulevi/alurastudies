@@ -3,5 +3,5 @@ import 'dotenv/config';
 const PORT = 3000;
 
 app.listen(PORT, () => {
-	console.log('up and running');
+    console.log('up and running');
 });
