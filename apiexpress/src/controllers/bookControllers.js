@@ -1,3 +1,4 @@
+import NotFound from '../errors/NotFound.js';
 import { author } from '../models/Author.js';
 import book from '../models/Book.js';
 
@@ -15,7 +16,7 @@ class BookController {
             const id = req.params.id;
             const fetchedBook = await book.findById(id);
             if (!fetchedBook){
-                res.status(404).json({message : 'book not found'});
+                next(new NotFound('Book ID not found'));
             }else{
                 res.status(200).json(fetchedBook);
             }
@@ -37,19 +38,37 @@ class BookController {
     static async updateBookById(req, res, next) {
         try {
             const id = req.params.id;
-            await book.findByIdAndUpdate(id, req.body);
-            res.status(200).json({ message: `Book Updated: ${book.findById(id)}` });
+            const fetchedBook = await book.findById(id);
+            console.log(book);
+            if (!fetchedBook) {
+                next(new NotFound('book id not found'));
+            } else {
+                await book.findByIdAndUpdate(id, req.body);
+                res
+                    .status(200)
+                    .json({ message: `book Updated: ${Object.values(await book.findById(id)).map(book => book.title).join('')}` });
+            }
         } catch (error) {
+            console.log(error.errors);
             next(error);
         }
     }
     static async deleteBookById(req, res, next) {
         try {
             const id = req.params.id;
-            await book.findByIdAndDelete(id);
-            res
-                .status(200)
-                .json({ message: `book successfully deleted: ${book.findById(id)}` });
+            const fetchedBook = await book.findById(id);
+            console.log(book);
+            if (!fetchedBook) {
+                next(new NotFound('book id not found'));
+            } else {
+                const bookTitle = Object.values(fetchedBook).map(book => book.title).join('');
+                await book.findByIdAndDelete(id);
+                res
+                    .status(200)
+                    .json({
+                        message: `book with title ${bookTitle} successfully deleted`,
+                    });
+            }
         } catch (error) {
             next(error);
         }
