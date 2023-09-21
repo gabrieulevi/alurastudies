@@ -14,7 +14,11 @@ class BookController {
         try {
             const id = req.params.id;
             const fetchedBook = await book.findById(id);
-            res.status(200).json(fetchedBook);
+            if (!fetchedBook){
+                res.status(404).json({message : 'book not found'});
+            }else{
+                res.status(200).json(fetchedBook);
+            }
         } catch (error) {
             next(error);
         }

@@ -16,10 +16,8 @@ class AuthorController {
             const id = req.params.id;
             const fetchedAuthor = await author.findById(id);
             if (!fetchedAuthor) {
-                console.log(fetchedAuthor);
                 res.status(400).json({message : 'author id not found'});
             } else {
-                console.log(fetchedAuthor);
                 res.status(200).json(fetchedAuthor);
             }
         } catch (error) {
