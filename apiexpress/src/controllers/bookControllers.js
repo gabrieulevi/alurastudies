@@ -26,12 +26,19 @@ class BookController {
     }
     static async bookPost(req, res, next) {
         const newBook = req.body;
+        const foundAuthor = await author.findById(newBook.author);
         try {
-            const foundAuthor = await author.findById(newBook.author);
-            const fullBook = { ...newBook, author: { ...foundAuthor._doc } };
-            const createdBook = await book.create(fullBook);
-            res.status(201).json({ message: 'successfully created', book: createdBook });
+            if (foundAuthor){
+                const fullBook = { ...newBook, author: { ...foundAuthor._doc } };
+                const createdBook = await book.create(fullBook);
+                res.status(201).json({ message: 'successfully created', book: createdBook });
+            }else{
+                const createdBook = await book.create(newBook);
+                res.status(201).json({ message: 'successfully created', book: createdBook });
+            }
+
         } catch (error) {
+            console.log(error);
             next(error);
         }
     }
