@@ -16,8 +16,12 @@ const bookSchema = new mongoose.Schema(
         price: { type: Number },
         pages: { 
             type: Number,
-            min: [10, 'The page number must be between 10 - 10000, you sent {VALUE} to me'],
-            max: [10000, 'The page number must be between 10 - 10000, you sent {VALUE} to me']
+            validate: {
+                validator:(value) => value >= 10 && value <= 10000,
+                message: 'page value is not allowed: {VALUE}'
+            }
+            // min: [10, 'The page number must be between 10 - 10000, you sent {VALUE} to me'],
+            // max: [10000, 'The page number must be between 10 - 10000, you sent {VALUE} to me']
         },
         author: AuthorSchema,
     },

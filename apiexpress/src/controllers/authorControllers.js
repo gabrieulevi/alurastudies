@@ -1,6 +1,6 @@
 import NotFound from '../errors/NotFound.js';
 //import fetchElement from '../middlewares/fetchElement.js';
-import { author } from '../models/Author.js';
+import { author } from '../models/index.js';
 // import mongoose from 'mongoose';
 
 class AuthorController {
