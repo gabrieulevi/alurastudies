@@ -1,3 +1,4 @@
+import NotFound from '../errors/NotFound.js';
 import { author } from '../models/Author.js';
 // import mongoose from 'mongoose';
 
@@ -16,7 +17,7 @@ class AuthorController {
             const id = req.params.id;
             const fetchedAuthor = await author.findById(id);
             if (!fetchedAuthor) {
-                res.status(400).json({message : 'author id not found'});
+                next(new NotFound('author ID not found'));
             } else {
                 res.status(200).json(fetchedAuthor);
             }
@@ -35,27 +36,37 @@ class AuthorController {
         }
     }
     static async updateAuthorById(req, res, next) {
-        try {
-            const id = req.params.id;
-            await author.findByIdAndUpdate(id, req.body);
-            res
-                .status(200)
-                .json({ message: `Author Updated: ${author.findById(id)}` });
-        } catch (error) {
-            next(error);
+        const id = req.params.id;
+        const fetchedAuthor = await author.findById(id);
+        if (fetchedAuthor){
+            try {
+                await author.findByIdAndUpdate(id, req.body);
+                res
+                    .status(200)
+                    .json({ message: `Author Updated: ${author.findById(id)}` });
+            } catch (error) {
+                next(error);
+            }
+        } else {
+            next(new NotFound('author id not found'));
         }
     }
     static async deleteAuthorById(req, res, next) {
-        try {
-            const id = req.params.id;
-            await author.findByIdAndDelete(id);
-            res
-                .status(200)
-                .json({
-                    message: `author successfully deleted: ${author.findById(id)}`,
-                });
-        } catch (error) {
-            next(error);
+        const id = req.params.id;
+        const fetchedAuthor = await author.findById(id);
+        if (fetchedAuthor){
+            try {
+                await author.findByIdAndDelete(id);
+                res
+                    .status(200)
+                    .json({
+                        message: `author successfully deleted: ${author.findById(id)}`,
+                    });
+            } catch (error) {
+                next(error);
+            }
+        } else {
+            next(new NotFound('author id not found'));
         }
     }
 }
