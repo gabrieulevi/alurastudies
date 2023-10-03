@@ -74,25 +74,40 @@ class BookController {
         }
     }
     static async getBookByFilter(req, res, next) {
-        const {publishingCompany, title} = req.query;
+        const {publishingCompany, title, minpg, maxpg, aname} = req.query;
+        let search = {};
+        if (publishingCompany) search.publishingCompany = { $regex: publishingCompany, $options: 'i'};
+        if (title) search.title = { $regex: title, $options: 'i'};
+        if (minpg) search.pages = { $gte: minpg};
+        if (maxpg) search.pages = { $lte: maxpg};
+        if (aname) {
+            const newAuthor = await author.findOne({
+                name: aname
+            });
+            if(newAuthor){
+                search.author = newAuthor;
+            } else {
+                search = undefined;
+            } 
+            
 
-        const search = {};
-        if (publishingCompany) search.publishingCompany = publishingCompany;
-        if (title) search.title = title;
-        
+        }
 
-
-        const fetchedResult = await book.find(search);
-
-        console.log(fetchedResult);
-        if(fetchedResult){
-            try {
-                res.status(200).json({ book: fetchedResult });
-            } catch (error) {
-                next(error);
+        if (search){
+            const fetchedResult = await book.find(search).populate('author');
+    
+            console.log(fetchedResult);
+            if(fetchedResult){
+                try {
+                    res.status(200).json({ book: fetchedResult });
+                } catch (error) {
+                    next(error);
+                }
+            }else{
+                next(new NotFound('book not found'));
             }
-        }else{
-            next(new NotFound('book not found'));
+        } else {
+            res.status(200).send([]);
         }
     }
 }
