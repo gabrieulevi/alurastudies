@@ -7,16 +7,16 @@ import NotFound from '../errors/NotFound.js';
 // eslint-disable-next-line no-unused-vars
 function errorManipulator (error, req, res, next) {
     if (error instanceof mongoose.Error.CastError) {
-        console.log('bad request');
+        console.log('bad request', error);
         new BadRequest().sendResponse(res);
     } else if(error instanceof mongoose.Error.ValidationError){
-        console.log(`validation error on ${req.method, req.url, req.body}`);
+        console.log(`validation error on ${error}`);
         new ValidationError(error).sendResponse(res); 
     } else if (error instanceof NotFound){
-        console.log('instance of not found');
+        console.log('instance of not found', error);
         error.sendResponse(res);
     } else {
-        console.log('server error');
+        console.log('server error', error);
         new BaseError().sendResponse(res);
     }
 }

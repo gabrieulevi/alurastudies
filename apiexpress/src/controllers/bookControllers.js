@@ -26,10 +26,16 @@ class BookController {
         }
     }
     static async bookPost(req, res, next) {
+        console.log(req.body);
         const newBook = req.body;
         try {
-            const foundAuthor = await author.findById(newBook.author);
-            const fullBook = { ...newBook, author: { ...foundAuthor._doc } };
+            let foundAuthor, fullBook;
+            if (newBook.author){
+                foundAuthor = await author.findById(newBook.author);
+                fullBook = { ...newBook, author: { ...foundAuthor._doc } };
+            } else {
+                fullBook = newBook;
+            }
             const createdBook = await book.create(fullBook);
             res.status(201).json({ message: 'successfully created', book: createdBook });
         } catch (error) {
@@ -67,14 +73,21 @@ class BookController {
             next(NotFound('book not found'));
         }
     }
-    static async getBookByPublishingCompany(req, res, next) {
-        const publishingCompany = req.query.publishingCompany;
-        const bookByPublishingCompany = await book.find({
-            publishingCompany: publishingCompany,
-        });
-        if(bookByPublishingCompany){
+    static async getBookByFilter(req, res, next) {
+        const {publishingCompany, title} = req.query;
+
+        const search = {};
+        if (publishingCompany) search.publishingCompany = publishingCompany;
+        if (title) search.title = title;
+        
+
+
+        const fetchedResult = await book.find(search);
+
+        console.log(fetchedResult);
+        if(fetchedResult){
             try {
-                res.status(200).json({ book: bookByPublishingCompany });
+                res.status(200).json({ book: fetchedResult });
             } catch (error) {
                 next(error);
             }
