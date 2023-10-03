@@ -6,7 +6,7 @@ class BaseError extends Error {
     }
 
     sendResponse (res) {
-        res.status(this.status).json({
+        res.status(this.status).send({
             message : this.message,
             status : this.status
         });

@@ -10,5 +10,4 @@ const AuthorSchema = new mongoose.Schema(
 );
 
 const author = mongoose.model('author', AuthorSchema);
-
 export { author, AuthorSchema };

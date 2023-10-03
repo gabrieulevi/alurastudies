@@ -1,11 +1,11 @@
 import NotFound from '../errors/NotFound.js';
-import { author } from '../models/Author.js';
+import { author } from '../models/index.js';
 // import mongoose from 'mongoose';
 
 class AuthorController {
     static async listAuthors(req, res, next) {
         try {
-            const fetchedAuthor = await author.find({});
+            const fetchedAuthor = await author.find();
             res.status(200).json(fetchedAuthor);
         } catch (error) {
             next(error);

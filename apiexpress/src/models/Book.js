@@ -15,7 +15,7 @@ const bookSchema = new mongoose.Schema(
         },
         price: { type: Number },
         pages: { type: Number,
-            min: [10, 'the minimum page number is 10, you sent {VALUE}'],skjdaf
+            min: [10, 'the minimum page number is 10, you sent {VALUE}'],
             max: [1000, 'the max number of pages is 1000, you sent {VALUE}'] 
         },
         author: AuthorSchema,
