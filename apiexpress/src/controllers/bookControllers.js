@@ -1,4 +1,4 @@
-import BadRequest from '../errors/BadRequest.js';
+// import BadRequest from '../errors/BadRequest.js';
 import NotFound from '../errors/NotFound.js';
 import { author } from '../models/index.js';
 import { book } from '../models/index.js';
@@ -6,19 +6,9 @@ import { book } from '../models/index.js';
 class BookController {
     static async listBooks(req, res, next) {
         try {
-            let {limit = 5, pages = 1} = req.qery;
-            limit = parseInt(limit);
-            pages = parseInt(pages);
-            if (limit > 0 && pages > 0){
-                const bookList = await book.find({})
-                    .skip((pages - 1) * limit)
-                    .limit(limit)
-                    .populate('author')
-                    .exec();
-                res.status(200).json(bookList);
-            } else {
-                next(new BadRequest());
-            }
+            const findBooks = book.find();
+            req.result = findBooks;
+            next();
         } catch (error) {
             next(error);
         }
@@ -106,15 +96,14 @@ class BookController {
         }
 
         if (search){
-            const fetchedResult = await book.find(search).populate('author');
+            const fetchedResult = book.find(search).populate('author');
     
             console.log(fetchedResult);
             if(fetchedResult){
-                try {
-                    res.status(200).json({ book: fetchedResult });
-                } catch (error) {
-                    next(error);
-                }
+                
+                req.result = fetchedResult;
+                next();
+                
             }else{
                 next(new NotFound('book not found'));
             }
