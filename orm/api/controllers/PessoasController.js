@@ -117,6 +117,21 @@ class PessoasController{
             res.status(500).send(error)
         }
     }
+    static async removePessoa(req, res){
+        const { matriculaId, estudanteId } = req.params;
+        try {
+            await database.Matriculas.destroy({
+                where: {
+                    id: Number(matriculaId),
+                    estudanteId: Number(estudanteId)
+
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).send(error)
+        }
+    }
 }
 
 
