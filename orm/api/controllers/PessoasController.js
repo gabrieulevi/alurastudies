@@ -21,6 +21,23 @@ class PessoasController{
             res.status(500).send(error);
         }
     }
+    static async pegaUmaMatricula(req, res){
+        const { estudanteId, matriculaId } = req.params
+        try {
+            console.log(id);
+            const umaMatricula = await database.Matriculas.findOne(
+                { 
+                    where: { 
+                        id: Number(matriculaId), 
+                        estudante_id : Number(estudanteId)
+                    } 
+                });
+            res.status(200).json(umaPessoa);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send(error);
+        }
+    }
     static async criaPessoa(req, res){
         const novaPessoa = req.body;
 
@@ -28,6 +45,19 @@ class PessoasController{
             console.log(novaPessoa);
             const novaPessoaCriada = await database.Pessoas.create(novaPessoa);
             return res.status(200).json(novaPessoaCriada);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send(error);
+        }
+    }
+    static async criaMatricula(req, res){
+        const {estudanteId} = req.params;
+        const novaMatricula = { ...req.body, estudante_id: Number(estudanteId) }
+
+        try {
+            console.log(novaMatricula);
+            const novaMatriculaCriada = await database.Matriculas.create(novaMatricula);
+            return res.status(200).json(novaMatriculaCriada);
         } catch (error) {
             console.log(error);
             res.status(500).send(error);
@@ -45,6 +75,27 @@ class PessoasController{
             const pessoaAtualizada = await database.Pessoas.findOne({
                 where: {
                     id: id
+                }
+            })
+            res.status(200).json(pessoaAtualizada);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send(error);
+        }
+    }
+    static async atualizaPessoa(req, res){
+        const novosDados = req.body;
+        const {estudanteId, matriculaId} = req.params
+        try {
+            await database.Matriculas.update(novosDados, {
+                where: {
+                    id: Number(matriculaId),
+                    estudante_id : Number(estudanteId)
+                }
+            })
+            const matriculaAtualizada = await database.Matriculas.findOne({
+                where: {
+                    id: matriculaId
                 }
             })
             res.status(200).json(pessoaAtualizada);
