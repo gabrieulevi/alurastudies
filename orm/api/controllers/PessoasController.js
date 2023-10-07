@@ -124,7 +124,6 @@ class PessoasController{
                 where: {
                     id: Number(matriculaId),
                     estudanteId: Number(estudanteId)
-
                 }
             })
         } catch (error) {
