@@ -106,6 +106,7 @@ class PessoasController{
     }
     static async removePessoa(req, res){
         const { id } = req.params;
+        console.log(id);
         try {
             await database.Pessoas.destroy({
                 where: {
@@ -117,18 +118,28 @@ class PessoasController{
             res.status(500).send(error)
         }
     }
-    static async removePessoa(req, res){
+    static async removeMatricula(req, res){
         const { matriculaId, estudanteId } = req.params;
         try {
             await database.Matriculas.destroy({
                 where: {
                     id: Number(matriculaId),
-                    estudanteId: Number(estudanteId)
+                    estudante_id: Number(estudanteId)
                 }
             })
         } catch (error) {
             console.log(error);
             res.status(500).send(error)
+        }
+    }
+    static async restauraPessoa(req, res){
+        const { id } = req.params;
+        try {
+            await database.Pessoas.restore( { where: { id : Number(id)}} );
+            res.status(200).send(`id ${id} restaurado`);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send(error);
         }
     }
 }
