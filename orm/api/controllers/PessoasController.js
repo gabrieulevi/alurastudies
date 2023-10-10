@@ -48,6 +48,22 @@ class PessoasController {
       res.status(500).send(error);
     }
   }
+  static async pegaMatriculas(req, res) {
+    const { estudanteId } = req.params;
+    try {
+      console.log(estudanteId);
+      const pessoa = await database.Pessoas.findOne({
+        where: {
+            id: Number(estudanteId)
+        }
+      })
+      const matriculas = await pessoa.getAulasMatriculadas();
+      res.status(200).json(matriculas);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
   static async criaPessoa(req, res) {
     const novaPessoa = req.body;
 

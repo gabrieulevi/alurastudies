@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const PessoasController = require("../controllers/PessoasController.js");
+const routes = require("./index.js");
 
 const router = Router();
 
@@ -23,5 +24,6 @@ router.post(
   "/pessoas/:estudanteId/matricla/:matriculaId",
   PessoasController.restauraMatricula
 );
+router.get("/pessoas/:estudanteId/matricula", PessoasController.pegaMatriculas);
 
 module.exports = router;
