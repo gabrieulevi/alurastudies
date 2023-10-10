@@ -113,6 +113,7 @@ class PessoasController{
                     id: Number(id)
                 }
             })
+            res.status(200).send('Pessoa deletada');
         } catch (error) {
             console.log(error);
             res.status(500).send(error)
