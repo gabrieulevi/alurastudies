@@ -111,27 +111,28 @@ class PessoasController {
       res.status(500).send(error);
     }
   }
-  static async atualizaPessoa(req, res) {
-    const novosDados = req.body;
-    const { estudanteId, matriculaId } = req.params;
-    try {
-      await database.Matriculas.update(novosDados, {
-        where: {
-          id: Number(matriculaId),
-          estudante_id: Number(estudanteId),
-        },
-      });
-      const matriculaAtualizada = await database.Matriculas.findOne({
-        where: {
-          id: matriculaId,
-        },
-      });
-      res.status(200).json(pessoaAtualizada);
-    } catch (error) {
-      console.log(error);
-      res.status(500).send(error);
-    }
-  }
+
+//   static async atualizaPessoa(req, res) {
+//     const novosDados = req.body;
+//     const { estudanteId, matriculaId } = req.params;
+//     try {
+//       await database.Matriculas.update(novosDados, {
+//         where: {
+//           id: Number(matriculaId),
+//           estudante_id: Number(estudanteId),
+//         },
+//       });
+//       const matriculaAtualizada = await database.Matriculas.findOne({
+//         where: {
+//           id: matriculaId,
+//         },
+//       });
+//       res.status(200).json(pessoaAtualizada);
+//     } catch (error) {
+//       console.log(error);
+//       res.status(500).send(error);
+//     }
+//   }
   static async removePessoa(req, res) {
     const { id } = req.params;
     console.log(id);
@@ -178,6 +179,22 @@ class PessoasController {
         where: { id: Number(matriculaId), estudante_id: Number(estudanteId) },
       });
       res.status(200).send(`id ${id} restaurado`);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+  static async pegaMatriculasPorTurma(req, res) {
+    const { turmaId } = req.params;
+    try {
+      const todasAsMatriculas = await database.Matriculas.findAndCountAll({
+        where: {
+            turma_id: Number(turmaId),
+            status: true
+        }, limit: 20,
+        order: [['estudante_id', 'DESC']]
+      })
+      res.status(200).json(todasAsMatriculas);
     } catch (error) {
       console.log(error);
       res.status(500).send(error);

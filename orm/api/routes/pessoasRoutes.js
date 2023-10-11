@@ -25,5 +25,5 @@ router.post(
   PessoasController.restauraMatricula
 );
 router.get("/pessoas/:estudanteId/matricula", PessoasController.pegaMatriculas);
-
+router.get("/pessoas/matricula/:turmaId/confirmadas", PessoasController.pegaMatriculasPorTurma);
 module.exports = router;
