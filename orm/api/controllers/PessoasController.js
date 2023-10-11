@@ -1,5 +1,5 @@
 const database = require("../models");
-
+const Sequelize = require("sequelize");
 class PessoasController {
   static async pegaTodasAsPessoasAtivas(req, res) {
     try {
@@ -195,6 +195,34 @@ class PessoasController {
         order: [['estudante_id', 'DESC']]
       })
       res.status(200).json(todasAsMatriculas);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+  static async pegaTurmasLotadas(req, res) {
+    const lotacaoTurma = 2;
+    try {
+      const turmasLotadas = await database.Matriculas.findAndCountAll({
+        where: {
+            status: true
+        }, limit: 20,
+        attributes: ['turma_id'],
+        group: ['turma_id'],
+        having: Sequelize.literal(`count(turma_id) >= ${lotacaoTurma}`)
+      })
+      res.status(200).json(turmasLotadas);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+  static async cancelaPessoa(req, res) {
+    const {estudanteId} = req.params;
+    try {
+      await database.Pessoas.update({ ativo: false }, {where: {id: Number(estudanteId)}})
+      await database.Matriculas.update({ status: false }, {where: {estudante_id: Number(estudanteId)}})
+      res.status(200).send("matriculas canceladas");
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
