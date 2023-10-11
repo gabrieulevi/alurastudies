@@ -13,12 +13,12 @@ class Services {
 
     }
 
-    async atualizaRegistro(dadosRegistro, id){
-
+    async atualizaRegistro(dadosRegistro, where, transacao = {}){
+        return database[this.nomeDoModelo].update(dadosRegistro, {where: {...where}}, transacao)
     }
 
     async removeRegistro(id){
-        
+
     }
 }
 

@@ -224,11 +224,8 @@ class PessoasController {
   static async cancelaPessoa(req, res) {
     const {estudanteId} = req.params;
     try {
-      database.Sequelize.transaction(async t => {
-        await database.Pessoas.update({ ativo: false }, {where: {id: Number(estudanteId)}}, {transaction: t})
-        await database.Matriculas.update({ status: false }, {where: {estudante_id: Number(estudanteId)}}, {transaction: t})
-        res.status(200).send("matriculas canceladas");
-      })
+      await pessoasServices.cancelaPessoaEMatriculas(Number(estudanteId));
+      res.status(200).send('pessoa cancelada')
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
