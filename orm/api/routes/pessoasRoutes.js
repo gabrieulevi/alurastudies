@@ -4,8 +4,8 @@ const routes = require("./index.js");
 
 const router = Router();
 
-router.get("/pessoas", PessoasController.pegaTodasAsPessoasAtivas);
-router.get("/pessoas/todos", PessoasController.pegaTodasAsPessoas);
+router.get("/pessoas", PessoasController.pegaTodasAsPessoas);
+router.get("/pessoas/ativas", PessoasController.pegaTodasAsPessoasAtivas);
 router.get("/pessoas/:id", PessoasController.pegaUmaPessoa);
 router.post("/pessoas", PessoasController.criaPessoa);
 router.put("/pessoas/:id", PessoasController.atualizaPessoa);
