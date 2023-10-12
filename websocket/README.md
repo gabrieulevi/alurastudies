@@ -1,0 +1,1 @@
+Esta aplicação consiste em fazer o estudo de websockets
