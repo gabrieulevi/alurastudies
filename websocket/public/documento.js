@@ -1,2 +1,5 @@
 const socket = io();
-console.log(socket)
+const textoEditor = document.getElementById("editor-texto")
+textoEditor.addEventListener("keyup", () => {
+    socket.emit("texto_editor", textoEditor.value)
+})
