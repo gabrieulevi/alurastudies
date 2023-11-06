@@ -6,8 +6,8 @@ import "./style.scss"
 function App() {
   return (
     <div className="AppStyle">
-      <Formulario/>
-      <Lista/>
+      <Formulario />
+      <Lista />
     </div>
   );
 }
