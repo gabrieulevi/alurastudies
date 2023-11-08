@@ -27,7 +27,6 @@ function Lista(){
                     {...item} 
                     />
                 ))}
-                
             </ul>
         </aside>
     )
