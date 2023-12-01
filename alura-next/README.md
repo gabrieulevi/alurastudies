@@ -1,1 +1,1 @@
-Aplicacao desenvolvida para estudo de next
+Aplicacao desenvolvida para estudo
